@@ -1,8 +1,16 @@
 package utils
 
 import (
+	"os/exec"
+	"runtime"
 	"testing"
 )
+
+// checkXclipAvailable checks if xclip is available on the system
+func checkXclipAvailable() bool {
+	cmd := exec.Command("which", "xclip")
+	return cmd.Run() == nil
+}
 
 func TestDetectPlatform(t *testing.T) {
 	platform := DetectPlatform()
@@ -12,6 +20,11 @@ func TestDetectPlatform(t *testing.T) {
 }
 
 func TestToClipboard(t *testing.T) {
+	// Skip test on Linux if xclip is not available
+	if runtime.GOOS == "linux" && !checkXclipAvailable() {
+		t.Skip("Skipping test: xclip is not available")
+	}
+
 	tests := []struct {
 		name    string
 		input   []byte
