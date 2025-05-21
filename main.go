@@ -8,10 +8,13 @@ import (
 
 // cli function to generate random uuid v4
 func main() {
-	id := commands.Run()
+	command := commands.NewUUID4Command()
+	id := command.Execute()
+
+	fmt.Println(id)
 
 	// Copy to clipboard
-	err := utils.ToClipboard([]byte(id), "linux")
+	err := utils.ToClipboard([]byte(id))
 	if err != nil {
 		fmt.Println("Error copying to clipboard: ", err)
 	} else {
